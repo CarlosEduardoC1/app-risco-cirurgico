@@ -1,0 +1,1 @@
+export const server = " https://riscocirurgico.herokuapp.com/";
