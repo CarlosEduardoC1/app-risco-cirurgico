@@ -7,6 +7,7 @@ import User from '../components/user';
 import List from '../components/user/list';
 import Login from '../components/login';
 import Load from '../components/load';
+import Profile from '../components/profile';
 
 export default class Rotas extends Component {
     render() {
@@ -18,6 +19,7 @@ export default class Rotas extends Component {
                 <Scene key="list" component={List} title="List" hideNavBar={true} direction="horizontal" duration={450} />
                 <Scene key="login" component={Login} title="Login" hideNavBar={true} />
                 <Scene key="load" component={Load} title="Load" hideNavBar={true} initial />
+                <Scene key="profile" component={Profile} title="Perfil" hideNavBar={true} direction="vertical" duration={450} />
             </Router>
         )
     }

@@ -33,13 +33,10 @@ export default class Login extends Component {
     async componentWillMount() {
         this.deviceState = await OneSignal.getPermissionSubscriptionState(async (status) => {
             await AsyncStorage.setItem('appID', status.userId);
+            this.deviceState = status.userId;
+            console.log(status.userId);
         });
     }
-
-    async componentDidMount() {
-        this.deviceState = await AsyncStorage.getItem('appID');
-    }
-
 
     async authentication() {
         this.setState({ loading: true });

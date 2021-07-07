@@ -4,9 +4,9 @@ import axios from 'axios';
 import { containerSearch, containerUpdate, styleContainer, styleImg, styleSearch, update } from './props';
 import { server } from '../../services';
 import { Button, List, Snackbar } from 'react-native-paper';
-import sendNotification from '../../services/notification';
-import { FlatList } from 'react-native';
+import Footer from '../footer';
 import { ScrollView } from 'react-native';
+import moment from 'moment';
 
 function Status() {
 
@@ -71,14 +71,14 @@ function Status() {
         await axios.post(server + "paciente/update-paciente", {
             status: sts,
             id: id_usr,
-            id_medico: id_med
+            id_medico: id_med,
+            dateTime: moment().format("DD/MM/YYYY HH:mm:ss")
         })
             .then(async response => {
                 await axios.post(server + "notificaiton/send", {
                     app_id: "3e4a73a9-b5ce-41d3-bafc-4188efe477af",
                     contents: { "en": "O status do seu paciente " + nome + " foi alterado" },
                     subtitle: { "en": "Atualização de status" },
-                    // small_icon: 'ic_stat_onesignal_default',
                     headings: { "en": "RISCO CIRURGICO APP" },
                     include_player_ids: [response.data.rows.appID]
                 })
@@ -99,9 +99,9 @@ function Status() {
         if (type == 'AD') {
             return (
                 <View style={{ width: '100%', padding: 10, alignItems: 'flex-start', justifyContent: 'space-between', flexDirection: 'row', flexWrap: 'wrap' }}>
-                    <Button mode='outlined' color='black' style={{ marginTop: 5 }} onPress={() => alteraStatus(nome, id_usr, id_med, "Em Consulta")}>Em Consulta</Button>
-                    <Button mode='outlined' color='green' style={{ marginTop: 5 }} onPress={() => alteraStatus(nome, id_usr, id_med, "Liberado para Cirurgia")}>Sem risco</Button>
-                    <Button mode='outlined' color='red' style={{ marginTop: 5 }} onPress={() => alteraStatus(nome, id_usr, id_med, "Com risco cirurgico")}>Com risco</Button>
+                    <Button mode='contained' color='orange' style={{ marginTop: 5, width: '50%' }} onPress={() => alteraStatus(nome, id_usr, id_med, "Aguardando Exames")}>Aguardando Exames</Button>
+                    <Button mode='contained' color='green' style={{ marginTop: 5, width: '50%' }} onPress={() => alteraStatus(nome, id_usr, id_med, "Liberado")}>Liberado</Button>
+                    <Button mode='contained' color='red' style={{ marginTop: 5, width: '100%' }} onPress={() => alteraStatus(nome, id_usr, id_med, "Cirurgia não recomendada")}>Cirurgia não recomendada</Button>
                 </View>
             )
         }
@@ -126,9 +126,9 @@ function Status() {
                     {paciente.map(item => {
                         let type = undefined;
                         if (item.status == 'Encaminhado') { type = 'black' };
-                        if (item.status == 'Em Consulta') { type = 'orange' };
-                        if (item.status == 'Liberado para Cirurgia') { type = 'green' };
-                        if (item.status == 'Com risco cirurgico') { type = 'red' };
+                        if (item.status == 'Aguardando Exames') { type = 'orange' };
+                        if (item.status == 'Liberado') { type = 'green' };
+                        if (item.status == 'Cirurgia não recomendada') { type = 'red' };
                         if (item.nome) {
                             return (
                                 <View>
@@ -156,6 +156,7 @@ function Status() {
                     })}
                 </ScrollView>
             </View>
+            <Footer />
             <Snackbar style={{ backgroundColor: color }} visible={snack} onDismiss={() => onDismiss()} duration={1500} >
                 {label}
             </Snackbar>

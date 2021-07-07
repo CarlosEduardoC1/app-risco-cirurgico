@@ -1,1 +1,1 @@
-export const server = " https://riscocirurgico.herokuapp.com/";
+export const server = "http://192.168.0.5:3050/";
